@@ -2,9 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Tag;
+use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
-    //
+
+    public function __construct() 
+    {
+    	$this->middleware('auth');
+    }
+    
+    /**
+     * Get all tags by User
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\static[]
+     */
+    public function listAll()
+    {
+    	return Tag::findByUser(Auth::user());
+    }
 }

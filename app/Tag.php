@@ -18,4 +18,9 @@ class Tag extends Model
 	public function links() {
 		return $this->belongsToMany('App\Link');
 	}
+	
+	public static function findByUser(User $user)
+	{
+		return self::where('user_id', $user->id);
+	}
 }
