@@ -13,9 +13,6 @@ class MenuBar extends Component {
 	          	<li role="presentation">
 	          		<a href="#">Tags</a>
 	          	</li>
-	          	<li role="presentation">
-	          		<a href="#">Categorias</a>
-	          	</li>
 	            <li role="presentation" className="active">
 		            <a href="#" onClick={() => { document.getElementById('form').submit(); }}>
 			          	<i className="glyphicon glyphicon-off"></i>
@@ -26,7 +23,7 @@ class MenuBar extends Component {
 	            </li>
 	          </ul>
 	        </nav>
-	        <h3 className="text-muted">Links úteis</h3>
+	        <h3 className="text-muted">Links Favoritos</h3>
 	      </div>
       </div>
 		);

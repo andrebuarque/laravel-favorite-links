@@ -21410,15 +21410,6 @@ var MenuBar = function (_Component) {
 							),
 							__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
 								"li",
-								{ role: "presentation" },
-								__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-									"a",
-									{ href: "#" },
-									"Categorias"
-								)
-							),
-							__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-								"li",
 								{ role: "presentation", className: "active" },
 								__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
 									"a",
@@ -21438,7 +21429,7 @@ var MenuBar = function (_Component) {
 					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
 						"h3",
 						{ className: "text-muted" },
-						"Links \xFAteis"
+						"Links Favoritos"
 					)
 				)
 			);
