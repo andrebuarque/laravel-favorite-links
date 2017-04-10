@@ -42,7 +42,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
         ],
-        "tests": [
+        "test": [
             "vendor/phpunit/phpunit/phpunit"
         ]
     },

@@ -15,12 +15,13 @@ class Tag extends Model
 		'title'
 	];
 	
-	public function links() {
+	public function links() 
+	{
 		return $this->belongsToMany('App\Link');
 	}
 	
 	public static function findByUser(User $user)
 	{
-		return self::where('user_id', $user->id);
+		return self::where('user_id', '=', $user->id)->get();
 	}
 }
