@@ -17,7 +17,7 @@ class TagController extends Controller
      * Get all tags by User
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\static[]
      */
-    public function listAll()
+    public function index()
     {
     	return Tag::findByUser(Auth::user());
     }

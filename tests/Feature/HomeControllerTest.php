@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Http\Response;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Http\Response;
+use Tests\TestCase;
 
 class HomeControllerTest extends TestCase
 {
+	use DatabaseMigrations;
+	
     /**
      * @return void
      */
@@ -25,7 +25,7 @@ class HomeControllerTest extends TestCase
      */
     public function testHomeWithSession()
     {
-    	$user = User::find(1);
+    	$user = factory('App\User')->create();
     	
     	$response = $this->actingAs($user)->get('/home');
     	

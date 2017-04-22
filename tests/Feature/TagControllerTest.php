@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\User;
 use App\Tag;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Response;
+use Tests\TestCase;
 
 class TagControllerTest extends TestCase
 {
+	use DatabaseMigrations;
+	
     /**
      * A basic test example.
      *
@@ -19,9 +19,15 @@ class TagControllerTest extends TestCase
      */
     public function testListAll()
     {
-    	$response = $this->actingAs(User::find(1))
+    	$sizeTags = 10;
+    	$user = factory('App\User')->create();
+    	$tags = factory('App\Tag', $sizeTags)->create();
+    	
+    	$response = $this->actingAs($user)
     					 ->get('/tags');
     	
-    	$response->assertStatus(Response::HTTP_OK);
+    	$response
+    		->assertStatus(Response::HTTP_OK)
+    		->assertJson($tags->toArray());
     }
 }

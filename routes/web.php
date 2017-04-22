@@ -19,4 +19,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('/tags', 'TagController@listAll');
+Route::resource('/tags', 'TagController');

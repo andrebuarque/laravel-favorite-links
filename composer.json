@@ -43,7 +43,7 @@
             "php artisan optimize"
         ],
         "test": [
-            "vendor/phpunit/phpunit/phpunit"
+            "vendor/bin/phpunit"
         ]
     },
     "config": {
