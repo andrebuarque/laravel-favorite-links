@@ -19,4 +19,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
+// Resources
 Route::resource('/tags', 'TagController');
+Route::resource('/links', 'LinkController');

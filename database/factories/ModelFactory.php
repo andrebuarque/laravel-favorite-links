@@ -30,3 +30,12 @@ $factory->define(App\Tag::class, function (Faker\Generator $faker) {
 		'user_id' => 1
 	];
 });
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Link::class, function (Faker\Generator $faker) {
+	return [
+		'title' => $faker->title,
+		'url' => $faker->url,
+		'user_id' => 1
+	];
+});
