@@ -40,54 +40,47 @@ class TagControllerTest extends TestCase
     		'title' => 'tag test'
     	];
     	
-    	factory($this->tag)->create($data);
+    	$tag = factory($this->tag)->create($data);
     	
     	$response = $this->actingAs($this->user)
-    					 ->get(self::URL_BASE . "/1");
+    					 ->get(self::URL_BASE . "/" . $tag->id);
     	
     	$response->assertStatus(Response::HTTP_OK)
-    			 ->assertJson(['data' => $data]);
+    			 ->assertJson($tag->toArray());
     }
     
     public function testCreate()
     {
-    	$params = ['title' => 'php'];
+    	$tag = factory($this->tag)->make();
     	
     	$response = $this->actingAs($this->user)
-    					 ->post(self::URL_BASE, $params);
+    					 ->post(self::URL_BASE, $tag->toArray());
     	
     	$response->assertStatus(Response::HTTP_CREATED)
-    			 ->assertJson($params);
+    			 ->assertJson($tag->toArray());
     }
     
     public function testUpdate() 
     {
-    	factory($this->tag)->create();
-    	
-    	$params = ['title' => 'php1'];
+    	$tag = factory($this->tag)->create();
+    	$tag->title = 'php1';
     	
     	$response = $this->actingAs($this->user)
-    					 ->put(self::URL_BASE . "/1", $params);
+    					 ->put(self::URL_BASE . "/" . $tag->id, $tag->toArray());
     	
     	$response->assertStatus(Response::HTTP_OK)
-    			 ->assertJson($params);
+    			 ->assertJson($tag->toArray());
     }
     
     public function testDelete()
     {
-    	factory($this->tag, 2)->create();
+    	$tags = factory($this->tag, 2)->create();
     	
     	// delete
     	$response = $this->actingAs($this->user)
-    					 ->delete(self::URL_BASE . "/1");
+    					 ->delete(self::URL_BASE . "/" . $tags[0]->id);
     	
-		$response->assertStatus(Response::HTTP_OK);
-
-		// list all
-		$response = $this->actingAs($this->user)
-						 ->get(self::URL_BASE);
-		
-		$response->assertStatus(Response::HTTP_OK);
-		$this->assertEquals(count($response->json()), 1);
+		$response->assertStatus(Response::HTTP_OK)
+				 ->assertJson($tags[0]->toArray());
     }
 }
