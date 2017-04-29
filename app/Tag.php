@@ -20,8 +20,14 @@ class Tag extends Model
 		return $this->belongsToMany('App\Link');
 	}
 	
-	public static function findByUser(User $user)
+	public static function listAllByUser(User $user)
 	{
-		return self::where('user_id', '=', $user->id)->get();
+		return self::whereRaw('user_id = ?', [$user->id])->get();
 	}
+	
+	public static function findOneByUser(User $user, int $id)
+	{
+		return self::whereRaw('user_id = ? and id = ?', [$user->id, $id])->first();
+	}
+	
 }

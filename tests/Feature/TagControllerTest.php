@@ -24,8 +24,7 @@ class TagControllerTest extends TestCase
 	
     public function testListAll()
     {
-    	$sizeTags = 10;
-    	$tags = factory($this->tag, $sizeTags)->create();
+    	$tags = factory($this->tag, 10)->create();
     	
     	$response = $this->actingAs($this->user)
     					 ->get(self::URL_BASE);
@@ -36,17 +35,20 @@ class TagControllerTest extends TestCase
     
     public function testFindOne()
     {
-    	$data = [
-    		'title' => 'tag test'
-    	];
-    	
-    	$tag = factory($this->tag)->create($data);
+    	$tag = factory($this->tag)->create();
     	
     	$response = $this->actingAs($this->user)
     					 ->get(self::URL_BASE . "/" . $tag->id);
     	
     	$response->assertStatus(Response::HTTP_OK)
     			 ->assertJson($tag->toArray());
+    }
+    
+    public function testFindOne404()
+    {
+    	$this->actingAs($this->user)
+    		 ->get(self::URL_BASE . "/1")
+    		 ->assertStatus(Response::HTTP_NOT_FOUND);
     }
     
     public function testCreate()
@@ -72,15 +74,31 @@ class TagControllerTest extends TestCase
     			 ->assertJson($tag->toArray());
     }
     
+    public function testUpdate404()
+    {
+    	$tag = factory($this->tag)->create();
+    	$tag->title = 'php1';
+    	 
+    	$this->actingAs($this->user)
+    		 ->put(self::URL_BASE . "/123", $tag->toArray())
+    		 ->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+    
     public function testDelete()
     {
     	$tags = factory($this->tag, 2)->create();
     	
-    	// delete
     	$response = $this->actingAs($this->user)
     					 ->delete(self::URL_BASE . "/" . $tags[0]->id);
     	
 		$response->assertStatus(Response::HTTP_OK)
 				 ->assertJson($tags[0]->toArray());
+    }
+    
+    public function testDelete404()
+    {
+    	$this->actingAs($this->user)
+    		 ->delete(self::URL_BASE . "/1")
+    		 ->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }
