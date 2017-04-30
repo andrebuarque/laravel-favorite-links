@@ -15,6 +15,8 @@ class Tag extends Model
 		'title', 'user_id'
 	];
 	
+	protected $hidden = ['pivot', 'user_id'];
+	
 	public function links() 
 	{
 		return $this->belongsToMany('App\Link');

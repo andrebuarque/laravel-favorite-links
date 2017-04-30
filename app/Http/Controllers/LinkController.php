@@ -3,27 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Link;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 class LinkController extends Controller
 {
+	private $user;
+	
+	public function __construct()
+	{
+		$this->middleware('auth');
+		$this->user = Auth::user();
+	}
+	
     /**
-     * Display a listing of the resource.
+     * Get links of the User
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        // TODO
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        // TODO
+        try {
+        	
+        	return Link::listAllByUser($this->user);
+        	
+        } catch (Exception $e) {
+        	return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -34,7 +41,20 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO
+    	try {
+    			
+    		$data = $request->only('title', 'url', 'tags');
+    		$data['user_id'] = $this->user->id;
+    		
+    		$link = Link::create($data);
+    		
+    		$link->tags()->attach($data['tags']);
+    		
+    		return response()->json(Link::findOneByUser($this->user, $link->id), Response::HTTP_CREATED);
+    			
+    	} catch (Exception $e) {
+    		return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+    	}
     }
 
     /**

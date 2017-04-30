@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use Mockery\Undefined;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
