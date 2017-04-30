@@ -23,10 +23,12 @@ class LinkControllerTest extends TestCase
 
 	public function testListAll()
 	{
-		$links = factory($this->link, 2)->create();
-		foreach ($links as $link) {
-			$link->tags()->attach(factory('App\Tag')->create()->id);
-		}
+		$links = factory($this->link, 2)
+					->create()
+					->map(function($link){
+						$link->tags()->attach(factory('App\Tag')->create()->id);
+						return $link;
+					});
 		
 		$this->actingAs($this->user)
 			 ->get(self::URL_BASE)
@@ -34,25 +36,110 @@ class LinkControllerTest extends TestCase
 			 ->assertJson($links->toArray());
 	}
 	
-	public function testCreate() {
+	public function testCreate() 
+	{
 		$link = factory($this->link)->make([
 			'created_at' => Carbon::now(),
 			'updated_at' => Carbon::now(),
 			'id' => 1
 		]);
-		$tags = factory('App\Tag', 2)->create();
 		
-		$link->tags = $tags;
-		
-		$tags = array_map(function ($tag) { return $tag['id']; }, $link->tags->toArray());
+		$link->tags = factory('App\Tag', 2)->create();
 		
 		$data = $link->toArray();
-		$data['tags'] = $tags;
+		$data['tags'] = $link->tags->map(function($tag) { return $tag->id; })->toArray();
+		
+		$assertJSON = $link->toArray();
+		$assertJSON['tags'] = $link->tags->toArray();
 		
 		$this->actingAs($this->user)
 			 ->post(self::URL_BASE, $data)
 			 ->assertStatus(Response::HTTP_CREATED)
-			 ->assertJson($link->toArray());
+			 ->assertJson($assertJSON);
 	}
 	
+	public function testFindOne() 
+	{
+		$link = factory($this->link)->create();
+		$tags = factory('App\Tag', 2)->create();
+		$idTags = $tags->map(function($tag) { return $tag->id; })->toArray();
+		$link->tags()->attach($idTags);
+		
+		$assertJSON = $link->toArray();
+		$assertJSON['tags'] = $tags->toArray();
+		
+		$this->actingAs($this->user)
+			 ->get(self::URL_BASE . '/' . $link->id)
+			 ->assertStatus(Response::HTTP_OK)
+			 ->assertJson($assertJSON);
+	}
+	
+	public function testFindOne404() 
+	{
+		$this->actingAs($this->user)
+			 ->get(self::URL_BASE . '/1')
+			 ->assertStatus(Response::HTTP_NOT_FOUND);
+	}
+	
+	public function testUpdate() 
+	{
+		$link = factory($this->link)->create();
+		$tags = factory('App\Tag', 2)->create();
+		$idTags = $tags->map(function($tag) { return $tag->id; })->toArray();
+		$link->tags()->attach($idTags);
+		
+		$link->title = 'other title';
+		$link->url = 'http://www.otherlink.com';
+		
+		$data = $link->toArray();
+		$data['tags'] = $idTags;
+	
+		$assertJSON = $link->toArray();
+		$assertJSON['tags'] = $tags->toArray();
+	
+		$this->actingAs($this->user)
+			 ->put(self::URL_BASE . '/' . $link->id, $data)
+			 ->assertStatus(Response::HTTP_OK)
+			 ->assertJson($assertJSON);
+	}
+	
+	public function testUpdate404() 
+	{
+		$link = factory($this->link)->create();
+		$tags = factory('App\Tag', 2)->create();
+		$idTags = $tags->map(function($tag) { return $tag->id; })->toArray();
+		$link->tags()->attach($idTags);
+		
+		$link->title = 'other title';
+		$link->url = 'http://www.otherlink.com';
+		
+		$data = $link->toArray();
+		$data['tags'] = $idTags;
+		
+		$this->actingAs($this->user)
+			 ->put(self::URL_BASE . '/30', $data)
+			 ->assertStatus(Response::HTTP_NOT_FOUND);
+	}
+	
+	public function testDelete()
+	{
+		$link = factory($this->link)->create();
+		$tags = factory('App\Tag', 2)->create();
+		$link->tags()->attach($tags->map(function($tag) { return $tag->id; })->toArray());
+		
+		$assertJSON = $link->toArray();
+		$assertJSON['tags'] = $tags->toArray();
+		
+		$this->actingAs($this->user)
+			 ->delete(self::URL_BASE . '/' . $link->id)
+			 ->assertStatus(Response::HTTP_OK)
+			 ->assertJson($assertJSON);
+	}
+	
+	public function testDelete404()
+	{
+		$this->actingAs($this->user)
+			 ->delete(self::URL_BASE . '/30')
+			 ->assertStatus(Response::HTTP_NOT_FOUND);
+	}
 }

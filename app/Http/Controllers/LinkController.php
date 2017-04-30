@@ -63,9 +63,20 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request, Response $response)
     {
-        // TODO
+        try {
+        	
+        	$link = Link::findOneByUser($this->user, $id);
+        	
+        	if (isset($link))
+        		return $link;
+        	
+        	return $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        	
+        } catch (Exception $e) {
+        	return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -75,9 +86,25 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id, Request $request, Response $response)
     {
-        // TODO
+        try {
+        	
+        	$data = $request->only('title', 'url', 'tags');
+        	
+        	$link = Link::findOneByUser($this->user, $id);
+        	
+        	if (isset($link)) {
+        		$link->update($data);
+        		$link->tags()->sync($data['tags']);
+        		return $link;
+        	}
+        	
+        	return $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        	
+        } catch (Exception $e) {
+        	return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -86,8 +113,22 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Response $response)
     {
-        // TODO
+    	try {
+    		 
+    		$link = Link::findOneByUser($this->user, $id);
+    		
+    		if (isset($link)) {
+    			$link->tags()->detach();
+    			$link->delete();
+    			return $link;
+    		}
+    		 
+    		return $response->setStatusCode(Response::HTTP_NOT_FOUND);
+    		 
+    	} catch (Exception $e) {
+    		return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+    	}
     }
 }
