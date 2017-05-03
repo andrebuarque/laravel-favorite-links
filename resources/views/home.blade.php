@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/react-bootstrap-table.min.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -23,7 +24,7 @@
 </head>
 <body>
 
-	<div class="container" id="root"></div>
+	<div id="root"></div>
 	
 	<script src="{{ asset('js/app.js') }}"></script>
 </body>

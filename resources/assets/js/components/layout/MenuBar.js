@@ -1,31 +1,49 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 class MenuBar extends Component {
 	render() {
 		return (
-			<div className="container">
-				<div className="header clearfix">
-	        <nav>
-	          <ul className="nav nav-pills pull-right">
-	          	<li role="presentation">
-	          		<a href="#">Links</a>
-	          	</li>
-	          	<li role="presentation">
-	          		<a href="#">Tags</a>
-	          	</li>
-	            <li role="presentation" className="active">
-		            <a href="#" onClick={() => { document.getElementById('form').submit(); }}>
-			          	<i className="glyphicon glyphicon-off"></i>
-			        </a>
-			        <form action='/logout' method='POST' id='form'>
-			        	<input type="hidden" name="_token" value={window.Laravel.csrfToken} />
-			        </form>
-	            </li>
-	          </ul>
-	        </nav>
-	        <h3 className="text-muted">Links Favoritos</h3>
-	      </div>
-      </div>
+			<nav className="navbar navbar-default navbar-static-top">
+				<div className="container">
+					<div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+              <span className="sr-only">Toggle Navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+			      <a className="navbar-brand" href="/home">
+			          Links Favoritos
+			      </a>
+					</div>
+					<div className="collapse navbar-collapse" id="app-navbar-collapse">
+						<ul className="nav navbar-nav">
+              &nbsp;
+            </ul>
+            <ul className="nav navbar-nav navbar-right">
+            	<li><Link to="/">Links</Link></li>
+							<li><Link to="/tags">Tags</Link></li>
+							<li className="dropdown">
+            		<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            			Andre Buarque <span className="caret"></span>
+            		</a>
+            		<ul className="dropdown-menu" role="menu">
+            			<li>
+            				<Link to="#"
+                        onClick={(event) => { event.preventDefault();document.getElementById('logout-form').submit(); }}>
+                        Logout
+                    </Link>
+                    <form id="logout-form" action="/logout" method="POST" style={{display: 'none'}}>
+                      <input type="hidden" name="_token" value={ window.Laravel.csrfToken } />
+                    </form>
+            			</li>
+            		</ul>
+            	</li>
+            </ul>
+					</div>
+				</div>
+			</nav>
 		);
 	}
 }
