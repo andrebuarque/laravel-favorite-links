@@ -26,22 +26,20 @@ class TagControllerTest extends TestCase
     {
     	$tags = factory($this->tag, 10)->create();
     	
-    	$response = $this->actingAs($this->user)
-    					 ->get(self::URL_BASE);
-    	
-    	$response->assertStatus(Response::HTTP_OK)
-    			 ->assertJson($tags->toArray());
+    	$this->actingAs($this->user)
+    		 ->get(self::URL_BASE)
+    		 ->assertStatus(Response::HTTP_OK)
+    		 ->assertJson($tags->toArray());
     }
     
     public function testFindOne()
     {
     	$tag = factory($this->tag)->create();
     	
-    	$response = $this->actingAs($this->user)
-    					 ->get(self::URL_BASE . "/" . $tag->id);
-    	
-    	$response->assertStatus(Response::HTTP_OK)
-    			 ->assertJson($tag->toArray());
+    	$this->actingAs($this->user)
+    		 ->get(self::URL_BASE . "/" . $tag->id)
+    		 ->assertStatus(Response::HTTP_OK)
+			 ->assertJson($tag->toArray());
     }
     
     public function testFindOne404()
@@ -55,11 +53,10 @@ class TagControllerTest extends TestCase
     {
     	$tag = factory($this->tag)->make();
     	
-    	$response = $this->actingAs($this->user)
-    					 ->post(self::URL_BASE, $tag->toArray());
-    	
-    	$response->assertStatus(Response::HTTP_CREATED)
-    			 ->assertJson($tag->toArray());
+    	$this->actingAs($this->user)
+			 ->post(self::URL_BASE, $tag->toArray())
+    		 ->assertStatus(Response::HTTP_CREATED)
+    		 ->assertJson($tag->toArray());
     }
     
     public function testUpdate() 
@@ -67,11 +64,10 @@ class TagControllerTest extends TestCase
     	$tag = factory($this->tag)->create();
     	$tag->title = 'php1';
     	
-    	$response = $this->actingAs($this->user)
-    					 ->put(self::URL_BASE . "/" . $tag->id, $tag->toArray());
-    	
-    	$response->assertStatus(Response::HTTP_OK)
-    			 ->assertJson($tag->toArray());
+    	$this->actingAs($this->user)
+    		 ->put(self::URL_BASE . "/" . $tag->id, $tag->toArray())
+    		 ->assertStatus(Response::HTTP_OK)
+    		 ->assertJson($tag->toArray());
     }
     
     public function testUpdate404()
@@ -88,11 +84,10 @@ class TagControllerTest extends TestCase
     {
     	$tags = factory($this->tag, 2)->create();
     	
-    	$response = $this->actingAs($this->user)
-    					 ->delete(self::URL_BASE . "/" . $tags[0]->id);
-    	
-		$response->assertStatus(Response::HTTP_OK)
-				 ->assertJson($tags[0]->toArray());
+    	$this->actingAs($this->user)
+    		 ->delete(self::URL_BASE . "/" . $tags[0]->id)
+    		 ->assertStatus(Response::HTTP_OK)
+			 ->assertJson($tags[0]->toArray());
     }
     
     public function testDelete404()
