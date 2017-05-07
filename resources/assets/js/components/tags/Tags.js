@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-import PageHeader from './layout/PageHeader';
-import BtnActions from './BtnActions';
+import PageHeader from '../layout/PageHeader';
+import BtnActions from '../BtnActions';
 
 class Tags extends Component {
 	render() {
 		return (
 			<div>
         <PageHeader title="Tags" />
-        <div style={{ marginTop: '15px' }}>
-          <button type="button" className="btn btn-primary">
-            <i className="glyphicon glyphicon-plus"></i> Nova tag
-          </button>
-        </div>
+
+        <Link to="/tags/create" className="btn btn-primary" style={{ marginTop: '15px' }}>
+          <i className="glyphicon glyphicon-plus"></i> Nova tag
+        </Link>
 
         <BootstrapTable 
           data={[{

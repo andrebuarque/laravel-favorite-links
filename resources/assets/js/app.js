@@ -4,7 +4,9 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 
 import MenuBar from './components/layout/MenuBar';
 import Links from './components/Links';
-import Tags from './components/Tags';
+import Tags from './components/tags/Tags';
+import TagsCreate from './components/tags/TagsCreate';
+import TagsEdit from './components/tags/TagsEdit';
 
 import './bootstrap';
 
@@ -27,6 +29,8 @@ ReactDOM.render(
       <IndexRoute component={Links} />
       <Route path="/" component={Links}/>
       <Route path="/tags" component={Tags}/>
+      <Route path="/tags/create" component={TagsCreate}/>
+      <Route path="/tags/edit/:id" component={TagsEdit}/>
     </Route>
 	</Router>,
 	document.getElementById('root')
