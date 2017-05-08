@@ -7,13 +7,17 @@ import PageHeader from '../layout/PageHeader';
 import BtnActions from '../BtnActions';
 
 class Tags extends Component {
+  constructor(props) {
+    super(props);
+  }
+
 	render() {
 		return (
 			<div>
         <PageHeader title="Tags" />
 
         <Link to="/tags/create" className="btn btn-primary" style={{ marginTop: '15px' }}>
-          <i className="glyphicon glyphicon-plus"></i> Nova tag
+          <i className="glyphicon glyphicon-plus"/> Nova tag
         </Link>
 
         <BootstrapTable 

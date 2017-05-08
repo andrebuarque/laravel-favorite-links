@@ -3,58 +3,57 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
-	private $user;
-
-    public function __construct() 
+    public function __construct()
     {
-    	$this->middleware('auth');
-    	$this->user = Auth::user();
+        $this->middleware('auth');
     }
-    
+
     /**
      * Get all tags by User
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\static[]
+     *
+     * @param Response $response
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function index(Response $response)
     {
-    	try {
-    		
-    		return Tag::listAllByUser($this->user);
-    		
-    	} catch (Exception $e) {
-    		return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-    	}
+        try {
+
+            return Tag::listAllByUser($this->getUser());
+
+        } catch (Exception $e) {
+            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-    
+
     /**
      * Get one tag of the User
-     * @param unknown $id
+     * @param int $id
      * @param Response $response
-     * @param Request $request
-     * @return Tag
+     * @return Response
      */
-    public function show($id, Response $response, Request $request)
+    public function show(int $id, Response $response)
     {
-    	try {
-    		
-    		$tag = Tag::findOneByUser($this->user, $id);
-    		
-    		if (isset($tag))
-    			return $tag;
-    		
-    		return $response->setStatusCode(Response::HTTP_NOT_FOUND);
-    		
-    	} catch (Exception $e) {
-    		return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-    	}
+        try {
+
+            $tag = Tag::findOneByUser($this->getUser(), $id);
+
+            if (isset($tag))
+                return $tag;
+
+            return $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        } catch (Exception $e) {
+            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-    
+
     /**
      * Store a Tag
      * @param Response $response
@@ -63,69 +62,75 @@ class TagController extends Controller
      */
     public function store(Response $response, Request $request)
     {
-    	try {
-    		
-    		$data = $request->only('title');
-    		$data['user_id'] = $this->user->id;
-    		 
-    		$tag = Tag::create($data);
-    		
-    		return response()->json($tag, Response::HTTP_CREATED);
-    		
-    	} catch (Exception $e) {
-    		return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-    	}
+        try {
+
+            $data = $request->only('title');
+            $data['user_id'] = $this->getUser()->id;
+
+            $tag = Tag::create($data);
+
+            return response()->json($tag, Response::HTTP_CREATED);
+
+        } catch (Exception $e) {
+            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-    
+
     /**
      * Update a Tag
-     * @param unknown $id
+     * @param int $id
      * @param Response $response
      * @param Request $request
-     * @return unknown
+     * @return Response
      */
-    public function update($id, Response $response, Request $request) 
+    public function update(int $id, Response $response, Request $request)
     {
-    	try {
-    		
-    		$data = $request->only('title');
-    	
-    		$tag = Tag::findOneByUser($this->user, $id);
-    		
-    		if (isset($tag)) {
-    			$tag->update($data);
-    			return $tag;
-    		}
-    		
-    		return $response->setStatusCode(Response::HTTP_NOT_FOUND);
-    	
-    	} catch (Exception $e) {
-    		return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-    	}
+        try {
+
+            $data = $request->only('title');
+
+            $tag = Tag::findOneByUser($this->getUser(), $id);
+
+            if (isset($tag)) {
+                $tag->update($data);
+                return $tag;
+            }
+
+            return $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        } catch (Exception $e) {
+            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-    
+
     /**
      * Delete a Tag of the User
-     * @param unknown $id
+     * @param int $id
      * @param Response $response
-     * @param Request $request
-     * @return unknown
+     * @return Response
+     * @internal param Request $request
      */
-    public function destroy($id, Response $response, Request $request)
+    public function destroy(int $id, Response $response)
     {
-    	try {
-    	
-    		$tag = Tag::findOneByUser($this->user, $id);
-    		
-    		if (isset($tag)) {
-    			$tag->delete();
-    			return $tag;
-    		}
-    	
-    		return $response->setStatusCode(Response::HTTP_NOT_FOUND);
-    		 
-    	} catch (Exception $e) {
-    		return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-    	}
+        try {
+
+            $tag = Tag::findOneByUser($this->getUser(), $id);
+
+            if (isset($tag)) {
+                $tag->delete();
+                return $tag;
+            }
+
+            return $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        } catch (Exception $e) {
+            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
+
+    private function getUser()
+    {
+        return Auth::user();
+    }
+
 }
