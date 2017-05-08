@@ -16,17 +16,27 @@ class Link extends Model
 	];
 	
 	protected $hidden = ['pivot', 'user_id'];
-	
+
+
 	public function tags() {
 		return $this->belongsToMany('App\Tag');
 	}
-	
-	public static function listAllByUser(User $user)
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public static function listAllByUser(User $user)
 	{
 		return self::with('tags')->whereRaw('user_id = ?', [$user->id])->get();
 	}
-	
-	public static function findOneByUser(User $user, int $id)
+
+    /**
+     * @param User $user
+     * @param int $id
+     * @return mixed
+     */
+    public static function findOneByUser(User $user, int $id)
 	{
 		return self::with('tags')->whereRaw('user_id = ? and id = ?', [$user->id, $id])->first();
 	}

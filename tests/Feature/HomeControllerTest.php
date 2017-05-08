@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\User;
+
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Response;
 use Tests\TestCase;

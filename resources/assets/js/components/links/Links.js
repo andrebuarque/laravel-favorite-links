@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-import PageHeader from './layout/PageHeader';
-import BtnActions from './BtnActions';
+import PageHeader from '../layout/PageHeader';
+import BtnActions from '../BtnActions';
 
 class Links extends Component {
-	render() {
+	static render() {
 		return (
 			<div>
         <PageHeader title="Links" />
 
-        <div style={{ marginTop: '15px' }}>
-          <button type="button" className="btn btn-primary">
-            <i className="glyphicon glyphicon-plus"></i> Novo link
-          </button>
-        </div>
+        <Link to="/links/create" className="btn btn-primary" style={{ marginTop: '15px' }}>
+          <i className="glyphicon glyphicon-plus"/> Novo link
+        </Link>
 
         <BootstrapTable 
           data={[{
@@ -39,7 +38,7 @@ class Links extends Component {
           <TableHeaderColumn dataField='tags'>Tags</TableHeaderColumn>
           <TableHeaderColumn 
             dataField='id' 
-            dataFormat={ (cell, row) => <BtnActions registryID={cell} urlEdit={`/links/edit/${cell}`} funcDelete={(id) => { return; }} /> }>
+            dataFormat={ (cell, row) => <BtnActions registryID={cell} urlEdit={`/links/edit/${cell}`} funcDelete={(id) => { return id; }} /> }>
             Ações
           </TableHeaderColumn>
         </BootstrapTable>
