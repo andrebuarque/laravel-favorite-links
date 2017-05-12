@@ -28,7 +28,7 @@ class TagController extends Controller
             return Tag::listAllByUser($this->getUser());
 
         } catch (Exception $e) {
-            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->responseError($e, $response);
         }
     }
 
@@ -50,7 +50,7 @@ class TagController extends Controller
             return $response->setStatusCode(Response::HTTP_NOT_FOUND);
 
         } catch (Exception $e) {
-            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->responseError($e, $response);
         }
     }
 
@@ -72,7 +72,7 @@ class TagController extends Controller
             return response()->json($tag, Response::HTTP_CREATED);
 
         } catch (Exception $e) {
-            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->responseError($e, $response);
         }
     }
 
@@ -99,7 +99,7 @@ class TagController extends Controller
             return $response->setStatusCode(Response::HTTP_NOT_FOUND);
 
         } catch (Exception $e) {
-            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->responseError($e, $response);
         }
     }
 
@@ -124,7 +124,7 @@ class TagController extends Controller
             return $response->setStatusCode(Response::HTTP_NOT_FOUND);
 
         } catch (Exception $e) {
-            return $response->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->responseError($e, $response);
         }
     }
 

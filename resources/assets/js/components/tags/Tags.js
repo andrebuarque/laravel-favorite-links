@@ -5,10 +5,42 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 import PageHeader from '../layout/PageHeader';
 import BtnActions from '../BtnActions';
+import TagService from '../../services/TagService';
 
 class Tags extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      dataList: []
+    };
+
+    this.actionsDataFormat = this.actionsDataFormat.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
+  }
+
+  componentDidMount() {
+    TagService.all((data) => {
+      this.setState({
+        dataList: data
+      });
+    }, (data) => {
+      alert('Ocorreu um erro: ' + data.message);
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+  }
+
+  actionsDataFormat(cell, row) {
+    const urlEdit = `/tags/edit/${cell}`;
+
+    return <BtnActions registryID={cell} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
+  }
+
+  deleteRow(id) {
+    return;
   }
 
 	render() {
@@ -21,13 +53,7 @@ class Tags extends Component {
         </Link>
 
         <BootstrapTable 
-          data={[{
-              id: 1,
-              title: "Tag 1"
-          }, {
-              id: 2,
-              title: "Tag 2"
-          }]} 
+          data={this.state.dataList}
           striped 
           hover
           pagination
@@ -36,7 +62,7 @@ class Tags extends Component {
           <TableHeaderColumn dataField='title'>Título</TableHeaderColumn>
           <TableHeaderColumn 
             dataField='id' 
-            dataFormat={ (cell, row) => <BtnActions registryID={cell} urlEdit={`/tags/edit/${cell}`} funcDelete={(id) => { return; }} /> }>
+            dataFormat={ this.actionsDataFormat }>
             Ações
           </TableHeaderColumn>
         </BootstrapTable>

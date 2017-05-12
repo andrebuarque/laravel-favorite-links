@@ -14,14 +14,14 @@ class TagService {
 
   static all(success, error) {
     fetch(this.URL, this.OPTIONS)
-      .then((r) => r.json())
+      .then(this.handleError)
       .then(success)
       .catch(error);
   }
 
   static get(id, success, error) {
     fetch(`${this.URL}/${id}`, this.OPTIONS)
-      .then((r) => r.json())
+      .then(this.handleError)
       .then(success)
       .catch(error);
   }
@@ -35,7 +35,7 @@ class TagService {
 
   static handleError(r) {
     if (!r.ok) {
-      throw Error(r.status);
+      throw Error(`${r.status} - ${r.statusText}`);
     }
     return r.json();
   }

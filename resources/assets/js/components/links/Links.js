@@ -7,7 +7,7 @@ import PageHeader from '../layout/PageHeader';
 import BtnActions from '../BtnActions';
 
 class Links extends Component {
-	static render() {
+	render() {
 		return (
 			<div>
         <PageHeader title="Links" />
@@ -38,7 +38,7 @@ class Links extends Component {
           <TableHeaderColumn dataField='tags'>Tags</TableHeaderColumn>
           <TableHeaderColumn 
             dataField='id' 
-            dataFormat={ (cell, row) => <BtnActions registryID={cell} urlEdit={`/links/edit/${cell}`} funcDelete={(id) => { return id; }} /> }>
+            dataFormat={ (cell, row) => <BtnActions registryID={cell} urlEdit={`/links/edit/${cell}`} funcDelete={(id) => { return; }} /> }>
             Ações
           </TableHeaderColumn>
         </BootstrapTable>
