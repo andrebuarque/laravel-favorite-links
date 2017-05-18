@@ -47,6 +47,15 @@ class TagService {
       .catch(error);
   }
 
+  static remove(id, success, error) {
+    const params = Object.assign({}, this.OPTIONS, {method: 'DELETE'});
+
+    fetch(`${this.URL}/${id}`, params)
+      .then(this.handleError)
+      .then(success)
+      .catch(error);
+  }
+
   static handleError(r) {
     if (!r.ok) {
       throw Error(`${r.status} - ${r.statusText}`);

@@ -17,9 +17,14 @@ class Tags extends Component {
 
     this.actionsDataFormat = this.actionsDataFormat.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
+    this.listAll = this.listAll.bind(this);
   }
 
   componentDidMount() {
+    this.listAll();
+  }
+
+  listAll() {
     TagService.all((data) => {
       this.setState({
         dataList: data
@@ -29,18 +34,20 @@ class Tags extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-  }
-
-  actionsDataFormat(cell, row) {
+  actionsDataFormat(cell) {
     const urlEdit = `/tags/edit/${cell}`;
 
     return <BtnActions registryID={cell} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
   }
 
   deleteRow(id) {
-    return;
+    if (confirm(`Deseja excluir o registro ${id}?`)) {
+      TagService.remove(id, () => {
+        this.listAll();
+      }, (err) => {
+        alert('Ocorreu um erro: ' + err.message);
+      });
+    }
   }
 
 	render() {
