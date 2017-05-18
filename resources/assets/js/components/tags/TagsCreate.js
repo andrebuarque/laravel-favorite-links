@@ -28,12 +28,13 @@ class TagsCreate extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const data = new FormData();
-    data.append('title', this.state.title);
+    const data = {
+      title: this.state.title
+    };
 
-    TagService.store(data,
+    TagService.store(JSON.stringify(data),
       (response) => {
-        alert(`Tag ${response.title} criada com sucesso!`);
+        location.href = '#/tags';
       }, (error) => {
         alert(`Houve um problema ao criar a tag. ${error}`);
       });

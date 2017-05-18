@@ -6,7 +6,8 @@ class TagService {
   static get OPTIONS() {
     return {
       headers: {
-        'X-CSRF-Token': window.Laravel.csrfToken
+        'X-CSRF-Token': window.Laravel.csrfToken,
+        'Content-Type': 'application/json; charset=UTF-8'
       },
       credentials: 'include'
     };
@@ -26,8 +27,21 @@ class TagService {
       .catch(error);
   }
 
+  static edit(id, data, success, error) {
+    const params = Object.assign({}, this.OPTIONS, {method: 'PUT', body: data});
+
+    console.log(data);
+
+    fetch(`${this.URL}/${id}`, params)
+      .then(this.handleError)
+      .then(success)
+      .catch(error);
+  }
+
   static store(data, success, error) {
-    fetch(this.URL, Object.assign({}, this.OPTIONS, {method: 'POST', body: data}))
+    const params = Object.assign({}, this.OPTIONS, {method: 'POST', body: data});
+
+    fetch(this.URL, params)
       .then(this.handleError)
       .then(success)
       .catch(error);

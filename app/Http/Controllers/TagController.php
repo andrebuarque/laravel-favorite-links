@@ -87,7 +87,7 @@ class TagController extends Controller
     {
         try {
 
-            $data = $request->only('title');
+            $data = ['title' => $request->get('title')];
 
             $tag = Tag::findOneByUser($this->getUser(), $id);
 

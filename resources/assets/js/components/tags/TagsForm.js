@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 
 class TagsForm extends Component {
   render() {
-    const {callbackSave, handleInputChange} = this.props;
+    const {callbackSave, handleInputChange, title} = this.props;
 
     return (
       <div>
@@ -11,7 +11,7 @@ class TagsForm extends Component {
 
           <div className="form-group">
             <label htmlFor="title">Título</label>
-            <input type="text" className="form-control" name="title" placeholder="Título" onChange={handleInputChange}/>
+            <input type="text" className="form-control" name="title" value={title} placeholder="Título" onChange={handleInputChange}/>
           </div>
 
           <button type="submit" className="btn btn-default">Salvar</button>
