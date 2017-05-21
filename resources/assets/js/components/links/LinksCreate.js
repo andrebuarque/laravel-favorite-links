@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import PageHeader from '../layout/PageHeader';
 import Form from './LinksForm';
 
+import LinkService from '../../services/LinkService';
+
 class LinksCreate extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +38,17 @@ class LinksCreate extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    alert(`save the link with name: ${this.state.title}`);
+    const data = this.state;
+    data.tags = data.tags.map((tag) => tag.id);
+    console.log(data);
+    return;
+
+    TagService.store(JSON.stringify(data),
+      (response) => {
+        location.href = '#/';
+      }, (error) => {
+        alert(`Houve um problema ao cadastrar o link. ${error}`);
+      });
   }
 
   render() {

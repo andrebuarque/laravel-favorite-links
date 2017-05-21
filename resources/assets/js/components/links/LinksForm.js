@@ -1,23 +1,31 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 import Select from 'react-select';
 
 import 'react-select/dist/react-select.css';
+import TagService from '../../services/TagService';
 
 class LinksForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      tags: [{
-        id: 1, title: 'tag1'
-      }, {
-        id: 2, title: 'tag2'
-      }],
+      tags: [],
       tagsValue: []
     };
 
     this.handleInputChangeTags = this.handleInputChangeTags.bind(this);
+    this.getTags = this.getTags.bind(this);
+  }
+
+  getTags() {
+    TagService.all((data) => {
+      this.setState({
+        tags: data
+      });
+    }, (data) => {
+      alert('Ocorreu um erro ao buscar as tags: ' + data.message);
+    });
   }
 
   handleInputChangeTags(event) {
@@ -29,12 +37,12 @@ class LinksForm extends Component {
   }
 
   componentDidMount() {
-
+    this.getTags();
   }
 
   render() {
-    const {callbackSave, handleInputChange} = this.props;
-    const {tags, tagsValue} = this.state;
+    const { callbackSave, handleInputChange } = this.props;
+    const { tags, tagsValue } = this.state;
 
     return (
       <div>

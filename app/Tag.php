@@ -1,5 +1,4 @@
 <?php
-
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,13 +6,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'title', 'user_id'
+        'title',
+        'user_id'
     ];
 
     /**
@@ -21,9 +22,13 @@ class Tag extends Model
      *
      * @var array
      */
-    protected $hidden = ['pivot', 'user_id'];
+    protected $hidden = [
+        'pivot',
+        'user_id'
+    ];
 
     /**
+     *
      * @return BelongsToMany
      */
     public function links()
@@ -34,24 +39,37 @@ class Tag extends Model
     /**
      * Find all tags of the user.
      *
-     * @param User $user
+     * @param User $user            
      * @return mixed
      */
     public static function listAllByUser(User $user)
     {
-        return self::whereRaw('user_id = ?', [$user->id])->get();
+        return self::whereRaw('user_id = ?', [
+            $user->id
+        ])->get();
     }
 
     /**
      * Find one tag of the user.
      *
-     * @param User $user
-     * @param int $id
+     * @param User $user            
+     * @param int $id            
      * @return mixed
      */
     public static function findOneByUser(User $user, int $id)
     {
-        return self::whereRaw('user_id = ? and id = ?', [$user->id, $id])->first();
+        return self::whereRaw('user_id = ? and id = ?', [
+            $user->id,
+            $id
+        ])->first();
     }
 
+    public static function exists($id)
+    {
+        $tag = self::whereRaw('id = ?', [
+            $id
+        ])->first();
+        
+        return isset($tag);
+    }
 }
