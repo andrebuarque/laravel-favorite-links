@@ -14,7 +14,6 @@ class LinkController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->user = Auth::user();
     }
 
     /**
@@ -27,7 +26,7 @@ class LinkController extends Controller
     {
         try {
             
-            return Link::listAllByUser($this->user);
+            return Link::listAllByUser($this->getUser());
         } catch (Exception $e) {
             return $this->responseError($e, $response);
         }
@@ -45,11 +44,11 @@ class LinkController extends Controller
         try {
             
             $data = $request->only('title', 'url', 'tags');
-            $data['user_id'] = $this->user->id;
+            $data['user_id'] = $this->getUser()->id;
             
             $link = Link::store($data);
             
-            $linkResult = Link::findOneByUser($this->user, $link->id);
+            $linkResult = Link::findOneByUser($this->getUser(), $link->id);
             
             return response()->json($linkResult, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -67,7 +66,7 @@ class LinkController extends Controller
     {
         try {
             
-            $link = Link::findOneByUser($this->user, $id);
+            $link = Link::findOneByUser($this->getUser(), $id);
             
             if (isset($link))
                 return $link;
@@ -91,7 +90,7 @@ class LinkController extends Controller
             
             $data = $request->only('title', 'url', 'tags');
             
-            $link = Link::findOneByUser($this->user, $id);
+            $link = Link::findOneByUser($this->getUser(), $id);
             
             if (isset($link)) {
                 $link->update($data);
@@ -115,7 +114,7 @@ class LinkController extends Controller
     {
         try {
             
-            $link = Link::findOneByUser($this->user, $id);
+            $link = Link::findOneByUser($this->getUser(), $id);
             
             if (isset($link)) {
                 $link->tags()->detach();
@@ -127,5 +126,10 @@ class LinkController extends Controller
         } catch (Exception $e) {
             return $this->responseError($e, $response);
         }
+    }
+
+    private function getUser()
+    {
+        return Auth::user();
     }
 }

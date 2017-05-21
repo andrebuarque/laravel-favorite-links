@@ -40,10 +40,8 @@ class LinksCreate extends Component {
 
     const data = this.state;
     data.tags = data.tags.map((tag) => tag.id);
-    console.log(data);
-    return;
 
-    TagService.store(JSON.stringify(data),
+    LinkService.store(JSON.stringify(data),
       (response) => {
         location.href = '#/';
       }, (error) => {
