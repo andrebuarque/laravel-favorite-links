@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Links úteis
+                    Links Favoritos
                 </div>
             </div>
         </div>

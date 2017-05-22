@@ -5,8 +5,61 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 import PageHeader from '../layout/PageHeader';
 import BtnActions from '../BtnActions';
+import LinkService from '../../services/LinkService';
 
 class Links extends Component {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      dataList: []
+    };
+
+    this.actionsDataFormat = this.actionsDataFormat.bind(this);
+    this.formatTagsColumn = this.formatTagsColumn.bind(this);
+    this.formatTitleColumn = this.formatTitleColumn.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
+    this.listAll = this.listAll.bind(this);
+  }
+
+  listAll() {
+    LinkService.all((data) => {
+      this.setState({
+        dataList: data
+      });
+    }, (data) => {
+      alert('Ocorreu um erro: ' + data.message);
+    });
+  }
+
+  deleteRow(id) {
+    if (confirm(`Deseja excluir o registro ${id}?`)) {
+      LinkService.remove(id, () => {
+        this.listAll();
+      }, (err) => {
+        alert('Ocorreu um erro: ' + err.message);
+      });
+    }
+  }
+
+  actionsDataFormat(cell) {
+    const urlEdit = `/links/edit/${cell}`;
+
+    return <BtnActions registryID={cell} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
+  }
+
+  formatTagsColumn(tags) {
+    return tags.map((tag) => tag.title).join(", ");
+  }
+
+  formatTitleColumn(cell, row) {
+    return <a href={row.url} target="_blank">{row.title}</a>;
+  }
+
+  componentDidMount() {
+    this.listAll();
+  }
+
 	render() {
 		return (
 			<div>
@@ -17,28 +70,17 @@ class Links extends Component {
         </Link>
 
         <BootstrapTable 
-          data={[{
-              id: 1,
-              title: "Title1",
-              url: 'http://allenfang.github.io/react-bootstrap-table/custom.html#insertmodal',
-              tags: 'react, es6'
-          }, {
-              id: 2,
-              title: "Title2",
-              url: 'https://github.com/AllenFang/react-bootstrap-table/',
-              tags: 'react, es6'
-          }]} 
+          data={this.state.dataList} 
           striped 
           hover
           pagination
           containerStyle={{ marginTop: '15px' }}>
-          <TableHeaderColumn isKey dataField='id'>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='title'>Título</TableHeaderColumn>
-          <TableHeaderColumn dataField='url'>URL</TableHeaderColumn>
-          <TableHeaderColumn dataField='tags'>Tags</TableHeaderColumn>
+          <TableHeaderColumn dataFormat={this.formatTitleColumn} dataField='title'>Link</TableHeaderColumn>
+          <TableHeaderColumn dataFormat={this.formatTagsColumn} dataField='tags'>Tags</TableHeaderColumn>
           <TableHeaderColumn 
-            dataField='id' 
-            dataFormat={ (cell, row) => <BtnActions registryID={cell} urlEdit={`/links/edit/${cell}`} funcDelete={(id) => { return; }} /> }>
+            dataField='id' isKey
+            width='100px'
+            dataFormat={ this.actionsDataFormat }>
             Ações
           </TableHeaderColumn>
         </BootstrapTable>

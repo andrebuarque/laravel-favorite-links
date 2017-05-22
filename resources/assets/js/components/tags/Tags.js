@@ -65,10 +65,11 @@ class Tags extends Component {
           hover
           pagination
           containerStyle={{ marginTop: '15px' }}>
-          <TableHeaderColumn isKey dataField='id'>ID</TableHeaderColumn>
           <TableHeaderColumn dataField='title'>Título</TableHeaderColumn>
           <TableHeaderColumn 
             dataField='id' 
+            width='100px'
+            isKey
             dataFormat={ this.actionsDataFormat }>
             Ações
           </TableHeaderColumn>
