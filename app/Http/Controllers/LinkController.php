@@ -89,13 +89,13 @@ class LinkController extends Controller
         try {
             
             $data = $request->only('title', 'url', 'tags');
+            $data['user_id'] = $this->getUser()->id;
             
             $link = Link::findOneByUser($this->getUser(), $id);
             
             if (isset($link)) {
-                $link->update($data);
-                $link->tags()->sync($data['tags']);
-                return $link;
+                Link::doUpdate($link, $data);
+                return Link::findOneByUser($this->getUser(), $link->id);
             }
             
             return $response->setStatusCode(Response::HTTP_NOT_FOUND);

@@ -30,8 +30,6 @@ class CrudService {
   static edit(id, data, success, error) {
     const params = Object.assign({}, this.OPTIONS, {method: 'PUT', body: data});
 
-    console.log(data);
-
     fetch(`${this.URL}/${id}`, params)
       .then(this.handleError)
       .then(success)

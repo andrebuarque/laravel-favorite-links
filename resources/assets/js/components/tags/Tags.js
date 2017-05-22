@@ -34,10 +34,10 @@ class Tags extends Component {
     });
   }
 
-  actionsDataFormat(cell) {
-    const urlEdit = `/tags/edit/${cell}`;
+  actionsDataFormat(id) {
+    const urlEdit = `/tags/edit/${id}`;
 
-    return <BtnActions registryID={cell} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
+    return <BtnActions registryID={id} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
   }
 
   deleteRow(id) {

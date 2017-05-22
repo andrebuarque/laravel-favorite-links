@@ -135,7 +135,7 @@ class LinkControllerTest extends TestCase
             ->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function testUpdate()
+    public function testUpdateWithExistingTags()
     {
         $link = factory($this->link)->create();
         $tags = factory('App\Tag', 2)->create();
@@ -157,6 +157,35 @@ class LinkControllerTest extends TestCase
             ->put(self::URL_BASE . '/' . $link->id, $data)
             ->assertStatus(Response::HTTP_OK)
             ->assertJson($assertJSON);
+    }
+
+    public function testUpdateWithNewTags()
+    {
+        $link = factory($this->link)->create();
+        $tags = [
+            'tag-test1',
+            'tag-test'
+        ];
+        
+        $link->title = 'other';
+        $link->url = 'other-link';
+        
+        factory('App\Tag')->create();
+        
+        $data = $link->toArray();
+        $data['tags'] = $tags;
+        $data['tags'][] = 1;
+        
+        $assertStructure = $this->getLinkStructure();
+        $assertStructure['tags'] = [
+            $this->getTagStructure(),
+            $this->getTagStructure()
+        ];
+        
+        $this->actingAs($this->user)
+            ->put(self::URL_BASE . '/' . $link->id, $data)
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJsonStructure($assertStructure);
     }
 
     public function testUpdate404()

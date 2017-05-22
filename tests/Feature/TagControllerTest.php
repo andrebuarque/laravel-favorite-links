@@ -22,6 +22,16 @@ class TagControllerTest extends TestCase
         parent::setUp();
         $this->user = factory('App\User')->create();
     }
+    
+    private function getTagStructure()
+    {
+        return [
+            'id',
+            'title',
+            'created_at',
+            'updated_at'
+        ];
+    }
 
     public function testListAll()
     {
@@ -68,7 +78,7 @@ class TagControllerTest extends TestCase
         $this->actingAs($this->user)
             ->put(self::URL_BASE . "/" . $tag->id, $tag->toArray())
             ->assertStatus(Response::HTTP_OK)
-            ->assertJson($tag->toArray());
+            ->assertJsonStructure($this->getTagStructure());
     }
 
     public function testUpdate404()

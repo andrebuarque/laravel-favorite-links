@@ -57,6 +57,16 @@ class Link extends Model
     public static function store($data)
     {
         $link = self::create($data);
+        
+        $existingIds = self::getExistingTags($data);
+        
+        $link->tags()->attach($existingIds->all());
+        
+        return $link;
+    }
+
+    private static function getExistingTags($data)
+    {
         $tags = collect($data['tags']);
         
         $existingIds = $tags->filter(function ($item, $key) {
@@ -74,8 +84,15 @@ class Link extends Model
             $existingIds->push($tag->id);
         }
         
-        $link->tags()->attach($existingIds->all());
+        return $existingIds;
+    }
+
+    public static function doUpdate(Link $link, $data)
+    {
+        $link->update($data);
         
-        return $link;
+        $existingTags = self::getExistingTags($data);
+        
+        $link->tags()->sync($existingTags->all());
     }
 }

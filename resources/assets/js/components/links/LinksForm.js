@@ -11,7 +11,7 @@ class LinksForm extends Component {
 
     this.state = {
       tags: [],
-      tagsValue: []
+      tagsValue: null
     };
 
     this.handleInputChangeTags = this.handleInputChangeTags.bind(this);
@@ -36,13 +36,12 @@ class LinksForm extends Component {
     this.props.handleInputChange(event);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getTags();
   }
 
   render() {
-    const { callbackSave, handleInputChange } = this.props;
-    const { tags, tagsValue } = this.state;
+    const { callbackSave, handleInputChange, title, url, tags } = this.props;
 
     return (
       <div>
@@ -50,23 +49,23 @@ class LinksForm extends Component {
 
           <div className="form-group">
             <label htmlFor="title">Título</label>
-            <input type="text" className="form-control" name="title" placeholder="Título" onChange={handleInputChange}/>
+            <input type="text" className="form-control" name="title" value={title} placeholder="Título" onChange={handleInputChange}/>
           </div>
 
           <div className="form-group">
             <label htmlFor="url">URL</label>
-            <input type="text" className="form-control" name="url" placeholder="URL" onChange={handleInputChange}/>
+            <input type="text" className="form-control" name="url" value={url} placeholder="URL" onChange={handleInputChange}/>
           </div>
 
           <div className="form-group">
             <label htmlFor="tags">Tags</label>
             <Select.Creatable
               multi
-              value={tagsValue}
+              value={this.state.tagsValue || tags}
               name="selectTag"
               valueKey="id"
               labelKey="title"
-              options={tags}
+              options={this.state.tags}
               onChange={this.handleInputChangeTags}
             />
           </div>

@@ -42,18 +42,18 @@ class Links extends Component {
     }
   }
 
-  actionsDataFormat(cell) {
-    const urlEdit = `/links/edit/${cell}`;
+  actionsDataFormat(id) {
+    const urlEdit = `/links/edit/${id}`;
 
-    return <BtnActions registryID={cell} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
+    return <BtnActions registryID={id} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
   }
 
   formatTagsColumn(tags) {
     return tags.map((tag) => tag.title).join(", ");
   }
 
-  formatTitleColumn(cell, row) {
-    return <a href={row.url} target="_blank">{row.title}</a>;
+  formatTitleColumn(title, row) {
+    return <a href={row.url} target="_blank">{title}</a>;
   }
 
   componentDidMount() {
@@ -78,7 +78,8 @@ class Links extends Component {
           <TableHeaderColumn dataFormat={this.formatTitleColumn} dataField='title'>Link</TableHeaderColumn>
           <TableHeaderColumn dataFormat={this.formatTagsColumn} dataField='tags'>Tags</TableHeaderColumn>
           <TableHeaderColumn 
-            dataField='id' isKey
+            dataField='id'
+            isKey
             width='100px'
             dataFormat={ this.actionsDataFormat }>
             Ações
