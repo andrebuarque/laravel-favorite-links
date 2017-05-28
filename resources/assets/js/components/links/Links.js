@@ -16,7 +16,6 @@ class Links extends Component {
     };
 
     this.actionsDataFormat = this.actionsDataFormat.bind(this);
-    this.formatTagsColumn = this.formatTagsColumn.bind(this);
     this.formatTitleColumn = this.formatTitleColumn.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
     this.listAll = this.listAll.bind(this);
@@ -25,7 +24,10 @@ class Links extends Component {
   listAll() {
     LinkService.all((data) => {
       this.setState({
-        dataList: data
+        dataList: data.map((link) => {
+          link.tags = link.tags.map((tag) => tag.title).join(", ");
+          return link;
+        })
       });
     }, (data) => {
       alert('Ocorreu um erro: ' + data.message);
@@ -46,10 +48,6 @@ class Links extends Component {
     const urlEdit = `/links/edit/${id}`;
 
     return <BtnActions registryID={id} urlEdit={urlEdit} funcDelete={ this.deleteRow }/>;
-  }
-
-  formatTagsColumn(tags) {
-    return tags.map((tag) => tag.title).join(", ");
   }
 
   formatTitleColumn(title, row) {
@@ -75,8 +73,8 @@ class Links extends Component {
           hover
           pagination
           containerStyle={{ marginTop: '15px' }}>
-          <TableHeaderColumn dataFormat={this.formatTitleColumn} dataField='title'>Link</TableHeaderColumn>
-          <TableHeaderColumn dataFormat={this.formatTagsColumn} dataField='tags'>Tags</TableHeaderColumn>
+          <TableHeaderColumn filter={{ type: 'TextFilter', condition: 'like' }} dataFormat={this.formatTitleColumn} dataField='title'>Link</TableHeaderColumn>
+          <TableHeaderColumn filter={{ type: 'TextFilter', condition: 'like' }} dataField='tags'>Tags</TableHeaderColumn>
           <TableHeaderColumn 
             dataField='id'
             isKey
