@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
+import UserService from '../../services/UserService';
+
 class MenuBar extends Component {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      username: ''
+    };
+  }
+
+  componentDidMount() {
+    UserService.getUserName((user) => {
+      this.setState({ username: user.name });
+    });
+  }
+
 	render() {
 		return (
 			<nav className="navbar navbar-default navbar-static-top">
@@ -26,7 +42,7 @@ class MenuBar extends Component {
 							<li><Link to="/tags">Tags</Link></li>
 							<li className="dropdown">
             		<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-            			Andre Buarque <span className="caret"></span>
+            			{ this.state.username } <span className="caret"></span>
             		</a>
             		<ul className="dropdown-menu" role="menu">
             			<li>
